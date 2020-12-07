@@ -1,5 +1,5 @@
 # SpriteUntediousifier
-3d renders to 2d sprites
+3d renders to 2d sprites using https://love2d.org/
 
 If you find any bugs or want/make imporvements make a visit the issue tracker.
 
