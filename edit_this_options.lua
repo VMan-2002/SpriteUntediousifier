@@ -1,5 +1,5 @@
 -- [[ Sprite Untediousifier by VMan_2002 ]]
--- Version 0.1
+-- Version 0.2
 
 -- [[ Controls ]]
 -- I: Make the sprites
@@ -7,6 +7,7 @@
 -- W: Export sprite strip for Rivals of Aether
 -- F: Open work dir
 -- Left/Right: Switch frames
+-- Up/Down: Switch animation to export
 
 -- Folder containing the frames to convert
 current_framestrip = "broom_intro"

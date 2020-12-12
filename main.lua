@@ -1,5 +1,5 @@
 -- [[ Sprite Untediousifier by VMan_2002 ]]
--- Version 0.1
+-- Version 0.2
 
 -- [[ Controls ]]
 -- I: Make the sprites
@@ -7,6 +7,7 @@
 -- W: Export sprite strip for Rivals of Aether
 -- F: Open work dir
 -- Left/Right: Switch frames
+-- Up/Down: Switch animation to export
 
 require("edit_this_options")
 
@@ -22,6 +23,7 @@ function love.load()
 		"To do: Instructions"
 	}, "\n")
 	imagename = "unnamed_sprite"
+	anx = 1
 	love.keypressed("i")
 end
 
@@ -29,8 +31,9 @@ function love.draw()
 	if abp then
 		local bright = 0.5 + (math.sin(love.timer.getTime() * 3) / 24)
 		love.graphics.clear(bright, bright, bright)
-		love.graphics.draw(frames[frame])
-		love.graphics.draw(color_orig[frame])
+		love.graphics.draw(frames[frame], 0, 20)
+		love.graphics.draw(color_orig[frame], 0, 20)
+		love.graphics.print("Current anim export: "..anx.." ("..animnames[anx]..")")
 	else
 		love.graphics.print("Current Name: "..imagename)
 		love.graphics.print(infotx, 0, 60)
@@ -53,6 +56,17 @@ function love.keypressed(a)
 			frame = #frames
 		end
 	end
+	if (a == "up") then
+		anx = anx + 1
+		if (anx > animcount) then
+			anx = 1
+		end
+	elseif a == "down" then
+		anx = anx - 1
+		if (anx < 1) then
+			anx = animcount
+		end
+	end
 	if a == "q" then
 		for k, v in pairs(frames) do
 			v:encode("png", "ExportedFrames_"..current_framestrip.."/".."Frame"..k..".png")
@@ -61,12 +75,16 @@ function love.keypressed(a)
 	end
 	if a == "w" then
 		local imw = frames[1]:getWidth()
-		local strip = SetNewCanvas(imw * 2 * #frames, frames[1]:getHeight()*2)
-		for k, v in pairs(frames) do
-			love.graphics.draw(v, imw * (k-1) * 2, 0, 0, 2, 2)
+		local animrange = anims[animnames[anx]]
+		local fcount = (1 + animrange[2] - animrange[1])
+		local strip = SetNewCanvas(imw * 2 * fcount, frames[1]:getHeight()*2)
+		local n = 0
+		for i = animrange[1], animrange[2] do
+			love.graphics.draw(frames[i], imw * n * 2, 0, 0, 2, 2)
+			n = n + 1
 		end
 		love.graphics.setCanvas()
-		strip:newImageData():encode("png", current_framestrip.."_strip"..#frames..".png")
+		strip:newImageData():encode("png", animnames[anx].."_strip"..fcount..".png")
 		love.window.showMessageBox("Success", "Successfully made the RoA sprite")
 	end
 	if (a == "i") then
@@ -180,6 +198,14 @@ function love.keypressed(a)
 		for k, v in pairs(colfound) do
 			print("Color px count", k, v)
 		end
+		local t = {}
+		anims = options.anims or {[current_framestrip] = {1, #frames}}
+		animnames = {}
+		for k, v in pairs(anims) do
+			animnames[#animnames + 1] = k
+			print("Anim name", k)
+		end
+		animcount = #animnames
 	end
 end
 

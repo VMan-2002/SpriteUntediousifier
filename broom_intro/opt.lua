@@ -1,13 +1,19 @@
 local a = {}
 
 --Frame count from 1 to this
-a.frames = 15
+a.frames = 30
 
 --Minimum amount of digits in a frame image name, example: 4 is 0001.png or 0020.png
 a.framedigits = 4
 
 --If not set then no outline pixel is done
 a.segment_default = "none"
+
+--Start and end frames of seprated animations
+a.anims = {
+	broom_intro = {1, 15},
+	dspecial = {16, 30}
+}
 
 --What each color in the segment map does for outlines
 a.segments = {
